@@ -1,9 +1,9 @@
 name: build and test featur branch
 
 on:
-  push:
-    branches:
-      - feature/*
+  pull_request:
+    branches: [ develop ]
+    types: [opened, reopened]
 
 jobs:
   build-feature:
@@ -11,6 +11,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
       - name: pull and checkout from git repoitory
 
         run: |
@@ -21,6 +24,14 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: '17'
+
+      - name: cache maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/ .m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       
       - name: build with maven
         run: |
