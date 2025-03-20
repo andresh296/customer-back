@@ -54,8 +54,8 @@ jobs:
       - name: MEerge to development branch
         if: ${{ success() }}
         run: |
-          git config --global user.email "EMAIL-OF-WORKFLOW@USER"
-          git config --global user.name "WORKFLOW-USER"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git merge --no-ff --verbose origin/${{ github.event.pull_request.head.ref }} -m "Merge pull request #${{ github.event.number }}"
 
       - name: Push changes after merge
